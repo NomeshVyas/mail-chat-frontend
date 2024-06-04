@@ -1,7 +1,9 @@
 import { Box, Button, List, ListItem, styled } from '@mui/material'
-import {CreateOutlined as CreateIcon, StarBorderOutlinedIcon as StarBorderOutlined} from '@mui/icons-material';
-import React from 'react'
+import { CreateOutlined as CreateIcon } from '@mui/icons-material';
+import React, { useState } from 'react'
 import { SIDEBAR_DATA } from '../config/SideBar.config';
+import ComposeMail from './ComposeMail';
+
 
 const ComposeBtn = styled(Button)({
     background: '#c2e7ff',
@@ -25,18 +27,22 @@ const Container = styled(Box)({
 })
 
 export default function SideBarContent() {
+    const [openDailog, setOpenDailog] = useState(false);
+
+
   return (
     <Container>
-        <ComposeBtn><CreateIcon/>Compose</ComposeBtn>
+        <ComposeBtn onClick={()=> setOpenDailog(true)} ><CreateIcon/>Compose</ComposeBtn>
         <List>
             {
                 SIDEBAR_DATA.map(data=> (
-                    <ListItem>
+                    <ListItem key={data.name}>
                         <data.icon fontSize='small' />{data.title}
                     </ListItem>
                 ))
             }
         </List>
+        <ComposeMail openDailog={openDailog} setOpenDailog={setOpenDailog} />
     </Container>
   )
 }
