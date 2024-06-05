@@ -1,7 +1,9 @@
-import React, {useState} from 'react'
-import { Dialog, Box, Typography, styled, InputBase, TextField, Button } from '@mui/material'
-import { Close as CloseIcon, DeleteOutline} from '@mui/icons-material'
-import { lightGrayBg } from '../Constants/constant'
+import React, {useState} from 'react';
+import { Dialog, Box, Typography, styled, InputBase, TextField, Button } from '@mui/material';
+import { Close as CloseIcon, DeleteOutline} from '@mui/icons-material';
+import { lightGrayBg } from '../Constants/constant';
+import useApi from '../Hooks/useApi';
+import { API_URL } from '../Services/api.url';
 
 const dialogStyle = {
     height: '90%',
@@ -48,6 +50,7 @@ const SendButton = styled(Button)({
 function ComposeMail({ openDailog, setOpenDailog }) {
 
     const [data, setData] = useState({});
+    const sendEmailService = useApi(API_URL.saveSentEmail);
 
     const onValueChange = (e) => {
         setData({...data, [e.target.name]: e.target.value})
@@ -67,15 +70,38 @@ function ComposeMail({ openDailog, setOpenDailog }) {
 
     const sendMail = (e) => {
         e.preventDefault();
+        const mailFrom="nomeshdadhich9057@gmail.com";
         window.Email.send({
             ...emailConfig,
             To : data.to,
-            From : "nomeshdadhich9057@gmail.com",
+            From : mailFrom,
             Subject : data.subject,
             Body : data.body
         }).then(
           message => alert(message)
         );
+
+        const payLoad = {
+            to: data.to,
+            from: mailFrom,
+            subject: data.subject,
+            body: data.body,
+            date: new Date(),
+            attechment: '',
+            name: 'Nomesh Vyas',
+            starred: false,
+            type: 'sent'
+        }
+
+        sendEmailService.call(payLoad);
+
+        if (!sendEmailService.error) {
+            setOpenDailog(false);
+            setData({});
+        } else {
+            
+        }
+
         setOpenDailog(false);
     }
 

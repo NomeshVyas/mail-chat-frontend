@@ -23,6 +23,11 @@ const Container = styled(Box)({
     },
     '& > ul > li > svg': {
         marginRight: 20
+    },
+    '& > button: hover': {
+        background: '#c2e7ff',
+        boxShadow: '1px 1px 5px #989898',
+        opacity: 0.9
     }
 })
 
