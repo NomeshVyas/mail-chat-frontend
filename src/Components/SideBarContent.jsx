@@ -6,7 +6,6 @@ import ComposeMail from './ComposeMail';
 import { useParams, NavLink } from 'react-router-dom';
 import { routes } from '../Constants/routes';
 
-
 const ComposeBtn = styled(Button)({
     background: '#c2e7ff',
     color: '#001d35',
