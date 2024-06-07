@@ -3,6 +3,8 @@ import { CreateOutlined as CreateIcon } from '@mui/icons-material';
 import React, { useState } from 'react'
 import { SIDEBAR_DATA } from '../config/SideBar.config';
 import ComposeMail from './ComposeMail';
+import { useParams, NavLink } from 'react-router-dom';
+import { routes } from '../Constants/routes';
 
 
 const ComposeBtn = styled(Button)({
@@ -19,10 +21,14 @@ const Container = styled(Box)({
         padding: '10px 0 0 5px',
         fontSize: 14,
         fontWeight: 500,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        '& > a': {
+            textDecoration: 'none',
+            color: 'inherit'
+        }
     },
-    '& > ul > li > svg': {
-        marginRight: 20
+    '& > ul > a > li > svg': {
+        marginRight: 18
     },
     '& > button: hover': {
         background: '#c2e7ff',
@@ -34,6 +40,12 @@ const Container = styled(Box)({
 export default function SideBarContent() {
     const [openDailog, setOpenDailog] = useState(false);
 
+    const {type} = useParams();
+
+    const ActiveListItemStyle = {
+        background: '#D3E3FD',
+        borderRadius: '0 16px 16px 0'
+    }
 
   return (
     <Container>
@@ -41,9 +53,14 @@ export default function SideBarContent() {
         <List>
             {
                 SIDEBAR_DATA.map(data=> (
-                    <ListItem key={data.name}>
-                        <data.icon fontSize='small' />{data.title}
-                    </ListItem>
+                    <NavLink key={data.name} to={`${routes.emails.path}/${data.name}`}>
+                        <ListItem style={
+                        type===data.name.toLowerCase() ?
+                        ActiveListItemStyle: {}
+                        }>
+                            <data.icon fontSize='small' />{data.title}
+                        </ListItem>
+                    </NavLink>
                 ))
             }
         </List>

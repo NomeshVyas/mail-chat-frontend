@@ -51,26 +51,48 @@ function ComposeMail({ openDailog, setOpenDailog }) {
 
     const [data, setData] = useState({});
     const sendEmailService = useApi(API_URL.saveSentEmail);
-
+    const saveDraftService = useApi(API_URL.saveDraftEmail);
+    
     const onValueChange = (e) => {
         setData({...data, [e.target.name]: e.target.value})
-    }
-
-    const emailConfig ={
-        Host : process.env.REACT_APP_SMTP_HOST,
-        Username : process.env.REACT_APP_SMTP_USERNAME,
-        Password : process.env.REACT_APP_SMTP_PASSWORD,
-        Port: process.env.REACT_APP_SMTP_PORT,
-    }
+        }
+        
+        const emailConfig ={
+            Host : process.env.REACT_APP_SMTP_HOST,
+            Username : process.env.REACT_APP_SMTP_USERNAME,
+            Password : process.env.REACT_APP_SMTP_PASSWORD,
+            Port: process.env.REACT_APP_SMTP_PORT,
+            }
+            
+    const mailFrom="nomeshdadhich9057@gmail.com";
 
     const closeComposeMail = (e) => {
         e.preventDefault();
+        const payLoad = {
+            to: data.to,
+            from: mailFrom,
+            subject: data.subject,
+            body: data.body,
+            date: new Date(),
+            attechment: '',
+            name: 'Nomesh Vyas',
+            starred: false,
+            type: 'drafts'
+        }
+
+        saveDraftService.call(payLoad, '');
+
+        if (!saveDraftService.error) {
+            setOpenDailog(false);
+            setData({});
+        } else {
+            
+        }
         setOpenDailog(false);
     }
 
     const sendMail = (e) => {
         e.preventDefault();
-        const mailFrom="nomeshdadhich9057@gmail.com";
         window.Email.send({
             ...emailConfig,
             To : data.to,
